@@ -12,7 +12,6 @@ const io = require('socket.io')(server, {
 });
 
 const users = [];
-const room = "general";
 
 io.on('connection', socket => {
   console.log(`Socket conectado: ${socket.id}`);
@@ -26,7 +25,7 @@ io.on('connection', socket => {
 
     console.log(users);
 
-    socket.emit('activeUsers', users);
+    io.emit('activeUsers', users);
 
     socket.on('disconnect', () => {
       console.log(`User ${socket.id} disconnected`);
