@@ -12,20 +12,25 @@ const io = require('socket.io')(server, {
 });
 
 const users = [];
+const messages = [];
 
 io.on('connection', socket => {
   console.log(`Socket conectado: ${socket.id}`);
 
   socket.on('userActive', user => {
-
     users.push({
       id: socket.id,
       userName: user
     });
 
-    console.log(users);
-
     io.emit('activeUsers', users);
+
+    socket.on('sendMessage', data => {
+      
+      messages.push(data);
+            
+      socket.broadcast.emit('receivedMessages', messages);
+    });
 
     socket.on('disconnect', () => {
       console.log(`User ${socket.id} disconnected`);
